@@ -1,2 +1,2 @@
 # dotfiles
-dotfiles
+bashrcはManjaroの初期生成されたやつだけどまあいっか
