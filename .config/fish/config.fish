@@ -1,4 +1,4 @@
-<B# Fish git prompt
+# Fish git prompt
 set __fish_git_prompt_showdirtystate 'yes'
 set __fish_git_prompt_showstashstate 'yes'
 set __fish_git_prompt_showuntrackedfiles 'yes'
@@ -15,3 +15,5 @@ set __fish_git_prompt_char_stashstate '↩'
 set __fish_git_prompt_char_upstream_ahead '+'
 set __fish_git_prompt_char_upstream_behind '-'
 
+#Env
+fish_add_path ~/local_python

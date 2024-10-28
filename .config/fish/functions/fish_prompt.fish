@@ -33,6 +33,12 @@ function __git
 end
 
 function fish_prompt
+  set -g fish_prompt_git_status_staged "o"
+  set -g fish_prompt_git_status_conflicted 'x'
+  set -g fish_prompt_git_status_changed '+'
+  set -g fish_prompt_git_status_untracked "?"
+  set -g fish_prompt_git_status_clean "✔"
+
   if [ $status -eq 0 ]
     set status_face (set_color green)"(*'-') < "
   else
