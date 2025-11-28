@@ -1,0 +1,60 @@
+# Format
+format = """
+[╭─](white) $username$hostname $directory$git_branch$git_status
+[╰─](white)$character
+"""
+right_format = """$time"""
+continuation_prompt = "▶▶ "
+
+
+# 1. Username Hostname
+[username]
+show_always = true
+format = '[$user]($style)@'
+style_user = "green bold"
+style_root = "red bold"
+
+[hostname]
+ssh_only = false
+format = '[$hostname]($style) '
+style = "green bold"
+trim_at = "."
+
+
+# 2. Directory
+[directory]
+style = "blue bold"
+truncation_length = 3
+truncation_symbol = "…/"
+
+
+# 3. Git Branch
+[git_branch]
+format = '[$symbol$branch]($style)'
+symbol = " "
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+style = "red"
+
+staged = "o"
+modified = "+"
+untracked = "?"
+conflicted = "x"
+deleted = "x"
+renamed = "»"
+up_to_date = "✔"
+
+
+# 4. Command Status
+[character]
+success_symbol = "[ $ <](green)"
+error_symbol = "[ $ <](blue)"
+
+
+# 5. Time
+[time]
+disabled = false
+format = '[$time]($style)'
+time_format = "%T"
+style = "bold black"
