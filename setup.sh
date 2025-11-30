@@ -29,10 +29,15 @@ else
     exit 1
 fi
 
-# --- 0. curl  ---
+# --- 0. curl, unzip ---
 if ! exists curl; then
     echo "Installing curl..."
     $INSTALL_CMD curl
+fi
+
+if ! exists unzip; then
+    echo "Installing unzip..."
+    $INSTALL_CMD unzip
 fi
 
 # --- 0. Build tools ---
@@ -143,7 +148,7 @@ else
         ZIP_FILE="${FONT_NAME}.zip"
         URL="https://github.com/ryanoasis/nerd-fonts/releases/download/${VERSION}/${ZIP_FILE}"
         
-        wget -qO "/tmp/$ZIP_FILE" "$URL" || curl -L -o "/tmp/$ZIP_FILE" "$URL"
+        curl -L -o "/tmp/$ZIP_FILE" "$URL"
         unzip -o -q "/tmp/$ZIP_FILE" -d "$FONT_DIR"
         rm "/tmp/$ZIP_FILE"
         
