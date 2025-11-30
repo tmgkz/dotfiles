@@ -35,6 +35,26 @@ if ! exists curl; then
     $INSTALL_CMD curl
 fi
 
+# --- 0. Build tools ---
+if ! exists cc; then
+    echo "Linker 'cc' not found. Installing build tools..."
+    if exists brew; then
+        echo "Checking Xcode Command Line Tools..."
+        if ! xcode-select -p >/dev/null 2>&1; then
+            echo "Installing Xcode Command Line Tools..."
+            xcode-select --install
+            echo "Please complete the Xcode installation dialog and run this script again."
+            exit 1
+        fi
+    elif exists pacman; then
+        sudo pacman -S --noconfirm base-devel
+    elif exists apt; then
+        $INSTALL_CMD build-essential
+    elif exists dnf; then
+        sudo dnf groupinstall -y "Development Tools"
+    fi
+fi
+
 # --- 1. fzf ---
 if ! exists fzf; then
     echo "Installing fzf..."
