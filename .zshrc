@@ -3,6 +3,10 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
+# starship
+eval "$(starship init zsh)"
+
+# sheldon
 eval "$(sheldon source)"
 
 # uv

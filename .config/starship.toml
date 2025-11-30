@@ -48,8 +48,8 @@ up_to_date = "✔"
 
 # 4. Command Status
 [character]
-success_symbol = "[ $ <](green)"
-error_symbol = "[ $ <](blue)"
+success_symbol = "[%< ](green)"
+error_symbol = "[%< ](blue)"
 
 
 # 5. Time
