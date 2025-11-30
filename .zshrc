@@ -2,6 +2,7 @@
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 export PATH="$HOME/.local/bin:$PATH"
+autoload -Uz compinit && compinit
 
 # starship
 eval "$(starship init zsh)"
