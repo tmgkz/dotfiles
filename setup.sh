@@ -98,6 +98,7 @@ if ! exists lsd; then
         echo "Installing starship..."
         curl -sS https://starship.rs/install.sh | sh -s -- -y
     fi
+fi
 
 # --- 8. Nerd Fonts ---
 FONT_NAME="JetBrainsMono"
