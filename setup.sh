@@ -3,7 +3,6 @@
 set -e
 
 DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-CONFIG_DIR="$HOME/.config"
 
 exists() {
     command -v "$1" >/dev/null 2>&1
@@ -121,7 +120,7 @@ if ! exists lsd; then
     # starship
     if ! exists starship; then
         echo "Installing starship..."
-        curl -sS https://starship.rs/install.sh | sh -s -- -y
+        curl -sS https://starship.rs/inst/all.sh | sh -s -- -y
     fi
 fi
 
@@ -163,15 +162,22 @@ fi
 
 # --- 9. Link Configs ---
 echo "==> Linking Configs..."
-mkdir -p "$CONFIG_DIR/sheldon"
-mkdir -p "$CONFIG_DIR/nvim"
+mkdir -p "$HOME/.config"
 
 # Link files
 [ -f "$DOTFILES_DIR/.zshrc" ] && ln -snf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 [ -f "$DOTFILES_DIR/.aliases" ] && ln -snf "$DOTFILES_DIR/.aliases" "$HOME/.aliases"
 
-# Link directory
-[ -d "$DOTFILES_DIR/.config/" ] && ln -snf "$DOTFILES_DIR/.config/" "$CONFIG_DIR/"
+# Link .config
+if [ -d "$DOTFILES_DIR/.config" ]; then
+    for config_dir in "$DOTFILES_DIR/.config"/*; do
+        if [ -d "$config_dir" ] || [ -f "$config_dir" ]; then
+            target="$HOME/.config/$(basename "$config_dir")"
+            ln -snf "$config_dir" "$target"
+            echo "Linked $(basename "$config_dir") to $target"
+        fi
+    done
+fi
 
 echo "Links created."
 
