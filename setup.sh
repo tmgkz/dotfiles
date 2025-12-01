@@ -169,11 +169,9 @@ mkdir -p "$CONFIG_DIR/nvim"
 # Link files
 [ -f "$DOTFILES_DIR/.zshrc" ] && ln -snf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 [ -f "$DOTFILES_DIR/.aliases" ] && ln -snf "$DOTFILES_DIR/.aliases" "$HOME/.aliases"
-[ -f "$DOTFILES_DIR/.config/sheldon/plugins.toml" ] && ln -snf "$DOTFILES_DIR/.config/sheldon/plugins.toml" "$CONFIG_DIR/sheldon/plugins.toml"
-[ -f "$DOTFILES_DIR/.config/starship.toml" ] && ln -snf "$DOTFILES_DIR/.config/starship.toml" "$CONFIG_DIR/starship.toml"
 
 # Link directory
-[ -d "$DOTFILES_DIR/.config/nvim" ] && ln -snf "$DOTFILES_DIR/.config/nvim" "$CONFIG_DIR/nvim"
+[ -d "$DOTFILES_DIR/.config/" ] && ln -snf "$DOTFILES_DIR/.config/" "$CONFIG_DIR/"
 
 echo "Links created."
 
