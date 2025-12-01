@@ -1,8 +1,8 @@
-# Rust (Cargo)
-[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
-
 export PATH="$HOME/.local/bin:$PATH"
 autoload -Uz compinit && compinit
+
+# Rust (Cargo)
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 # starship
 eval "$(starship init zsh)"
@@ -17,6 +17,6 @@ eval "$(uv generate-shell-completion zsh)"
 export NVIM_APPNAME="nvim"
 
 # Aliases
-if [ -f "$DOTFILES_DIR/.aliases" ]; then
-    source "$DOTFILES_DIR/.aliases"
+if [ -f "$HOME/.aliases" ]; then
+    source "$HOME/.aliases"
 fi
