@@ -83,7 +83,25 @@ fi
 # --- 4. Neovim ---
 if ! exists nvim; then
     echo "Installing Neovim..."
-    $INSTALL_CMD neovim
+    if [ "$(uname)" == "Darwin" ]; then
+        brew install neovim
+    else        
+        NVIM_URL="https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz"
+        DEST_DIR="$HOME/.local"
+        BIN_DIR="$HOME/.local/bin"
+        
+        mkdir -p "$DEST_DIR"
+        mkdir -p "$BIN_DIR"
+
+        curl -L -o "/tmp/nvim-linux-x86_64.tar.gz" "$NVIM_URL"
+        rm -rf "$DEST_DIR/nvim-linux-x86_64"
+        tar -C "$DEST_DIR" -xzf "/tmp/nvim-linux-x86_64.tar.gz"
+
+        ln -sf "$DEST_DIR/nvim-linux-x86_64/bin/nvim" "$BIN_DIR/nvim"
+        
+        # 後始末
+        rm "/tmp/nvim-linux-x86_64.tar.gz"
+    fi
 fi
 
 # --- 5. Zsh ---
