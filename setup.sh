@@ -134,12 +134,10 @@ if ! exists lsd; then
         echo "Installing lsd via Cargo..."
         cargo install lsd
     fi
-
-    # starship
-    if ! exists starship; then
-        echo "Installing starship..."
-        curl -sS https://starship.rs/inst/all.sh | sh -s -- -y
-    fi
+fi
+if ! exists starship; then
+    echo "Installing starship..."
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
 fi
 
 # --- 8. Nerd Fonts ---
