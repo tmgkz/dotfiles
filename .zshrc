@@ -20,3 +20,6 @@ export NVIM_APPNAME="nvim"
 if [ -f "$HOME/.aliases" ]; then
     source "$HOME/.aliases"
 fi
+
+# Local configurations
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"

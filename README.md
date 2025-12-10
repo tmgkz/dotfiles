@@ -5,19 +5,20 @@ This repository contains my personal dotfiles.
 ## Installation
 
 ### Setup
-   ```bash
-    $ chmod +x setup.sh
-    $ ./setup.sh
-   ```
+
+```bash
+ $ ./dotfiles/setup.sh
+```
 
 ## Install List
+
 - Rust
-   - C build tools
+  - C build tools
 - uv (Python)
 - neovim
 - zsh
-   - fzf
-   - starship
-   - lsd (LSDeluxe)
-      - Nerd font(JetBrainsMono)
-   - sheldon
+  - fzf
+  - starship
+  - lsd (LSDeluxe)
+    - Nerd font(JetBrainsMono)
+  - sheldon

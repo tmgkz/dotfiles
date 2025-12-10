@@ -96,10 +96,7 @@ if ! exists nvim; then
         curl -L -o "/tmp/nvim-linux-x86_64.tar.gz" "$NVIM_URL"
         rm -rf "$DEST_DIR/nvim-linux-x86_64"
         tar -C "$DEST_DIR" -xzf "/tmp/nvim-linux-x86_64.tar.gz"
-
         ln -sf "$DEST_DIR/nvim-linux-x86_64/bin/nvim" "$BIN_DIR/nvim"
-        
-        # 後始末
         rm "/tmp/nvim-linux-x86_64.tar.gz"
     fi
 fi
@@ -124,20 +121,53 @@ fi
 if ! exists lsd; then
     # lsd
     echo "Installing lsd..."
-    if exists brew; then
-        brew install lsd
-    elif exists pacman; then
-        sudo pacman -S --noconfirm lsd
-    elif exists dnf; then
-        sudo dnf install -y lsd
+    if exists brew || exists pacman || exists dnf; then
+        $INSTALL_CMD lsd
     else
-        echo "Installing lsd via Cargo..."
         cargo install lsd
     fi
 fi
 if ! exists starship; then
     echo "Installing starship..."
     curl -sS https://starship.rs/install.sh | sh -s -- -y
+fi
+if ! exists rg; then
+    echo "Installing ripgrep..."
+    if exists brew || exists pacman || exists dnf || exists apt; then
+        $INSTALL_CMD ripgrep
+    else 
+        cargo install ripgrep
+    fi
+fi
+if ! exists bat; then
+    echo "Installing bat..."
+    if exists brew || exists pacman || exists dnf; then
+        $INSTALL_CMD bat
+    elif exists apt; then
+        $INSTALL_CMD bat
+        mkdir -p "$HOME/.local/bin"
+        if exists batcat; then
+            ln -sf "$(which batcat)" "$HOME/.local/bin/bat"
+        fi
+    else 
+        cargo install --locked bat
+    fi
+fi
+if ! exists zoxide; then
+    echo "Installing zoxide..."
+    if exists brew || exists pacman; then
+        $INSTALL_CMD zoxide
+    else
+        cargo install zoxide
+    fi
+fi
+if ! exists delta; then
+    echo "Installing delta..."
+    if exists brew || exists pacman; then
+        $INSTALL_CMD git-delta
+    else
+        cargo install git-delta
+    fi
 fi
 
 # --- 8. Nerd Fonts ---
@@ -176,7 +206,16 @@ else
     fi
 fi
 
-# --- 9. Link Configs ---
+# --- 9. Local Settings ---
+echo "==> Configuring Environment..."
+if [ ! -f "$HOME/.zshrc.local" ]; then
+    echo "Creating .zshrc.local (for secret envs)..."
+    touch "$HOME/.zshrc.local"
+    echo "# This file is for local configuration (tokens, secrets)." >> "$HOME/.zshrc.local"
+    echo "# It is excluded from Git." >> "$HOME/.zshrc.local"
+fi
+
+# --- 10. Link Configs ---
 echo "==> Linking Configs..."
 mkdir -p "$HOME/.config"
 
@@ -194,10 +233,30 @@ if [ -d "$DOTFILES_DIR/.config" ]; then
         fi
     done
 fi
-
 echo "Links created."
 
-# --- 10. Default shell change ---
+# --- 11. Git Configuration ---
+echo "==> Git Configuration..."
+if [ -z "$(git config --global user.name)" ]; then
+    read -p "Enter Git user.name: " git_name
+    git config --global user.name "$git_name"
+fi
+
+if [ -z "$(git config --global user.email)" ]; then
+    read -p "Enter Git user.email: " git_email
+    git config --global user.email "$git_email"
+fi
+
+if exists delta; then
+    echo "Setting up Git Delta..."
+    git config --global core.pager delta
+    git config --global interactive.diffFilter "delta --color-only"
+    git config --global delta.navigate true
+    git config --global merge.conflictstyle diff3
+    git config --global diff.colorMoved default
+fi
+
+# --- 12. Default shell change ---
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "Changing default shell to zsh..."
     chsh -s "$(which zsh)"
