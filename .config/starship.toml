@@ -24,8 +24,9 @@ trim_at = "."
 # 2. Directory
 [directory]
 style = "blue bold"
-truncation_length = 3
+truncation_length = 0
 truncation_symbol = "…/"
+truncate_to_repo = false
 
 
 # 3. Git Branch
