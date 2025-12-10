@@ -21,5 +21,10 @@ if [ -f "$HOME/.aliases" ]; then
     source "$HOME/.aliases"
 fi
 
+# zoxide
+if command -v zoxide > /dev/null; then
+    eval "$(zoxide init zsh)"
+fi
+
 # Local configurations
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
