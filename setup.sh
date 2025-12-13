@@ -28,10 +28,15 @@ else
     exit 1
 fi
 
-# --- 0. curl, unzip ---
+# --- 0. curl, unzip, jq ---
 if ! exists curl; then
     echo "Installing curl..."
     $INSTALL_CMD curl
+fi
+
+if ! exists jq; then
+    echo "Installing jq..."
+    $INSTALL_CMD jq
 fi
 
 if ! exists unzip; then
@@ -58,6 +63,10 @@ if ! exists cc; then
         sudo dnf groupinstall -y "Development Tools"
     fi
 fi
+if ! exists gdb; then
+    echo "Installing gdb..."
+    $INSTALL_CMD gdb
+fi
 
 # --- 1. fzf ---
 if ! exists fzf; then
@@ -80,7 +89,44 @@ if ! exists uv; then
     curl -LsSf https://astral.sh/uv/install.sh | sh -s -- --no-modify-path
 fi
 
-# --- 4. Neovim ---
+# --- 4. Zig ---
+if ! exists zig; then
+    echo "Installing Zig..."
+    if exists brew || exists pacman; then
+        $INSTALL_CMD zig
+    else
+        echo "Fetching stable Zig version info..."
+        ARCH=$(uname -m)
+        if [ "$ARCH" == "x86_64" ]; then
+            ZIG_ARCH="x86_64-linux"
+        elif [ "$ARCH" == "aarch64" ]; then
+            ZIG_ARCH="aarch64-linux"
+        else
+            echo "Error: Unsupported architecture for Zig auto-install: $ARCH"
+            exit 1
+        fi
+
+        ZIG_VER=$(curl -s https://ziglang.org/download/index.json | jq -r 'keys | map(select(. != "master")) | sort_by(split(".") | map(tonumber)) | last')
+        ZIG_URL=$(curl -s https://ziglang.org/download/index.json | jq -r --arg v "$ZIG_VER" --arg a "$ZIG_ARCH" '.[$v][$a]["tarball"]')
+        
+        echo "Detected latest Zig version: $ZIG_VER"
+        echo "Downloading from: $ZIG_URL"
+        DEST_DIR="$HOME/.local"
+        BIN_DIR="$HOME/.local/bin"
+        
+        mkdir -p "$DEST_DIR"
+        mkdir -p "$BIN_DIR"
+        
+        curl -L -o "/tmp/zig.tar.xz" "$ZIG_URL"
+        rm -rf "$DEST_DIR/zig-linux-x86_64-${ZIG_VER}"
+        tar -C "$DEST_DIR" -xJf "/tmp/zig.tar.xz"
+        ln -sf "$DEST_DIR/zig-linux-x86_64-${ZIG_VER}/zig" "$BIN_DIR/zig"
+        rm "/tmp/zig.tar.xz"
+        echo "Zig installed."
+    fi
+fi
+
+# --- 5. Neovim ---
 if ! exists nvim; then
     echo "Installing Neovim..."
     if [ "$(uname)" == "Darwin" ]; then
@@ -101,13 +147,13 @@ if ! exists nvim; then
     fi
 fi
 
-# --- 5. Zsh ---
+# --- 6. Zsh ---
 if ! exists zsh; then
     echo "Installing zsh..."
     $INSTALL_CMD zsh
 fi
 
-# --- 6. Sheldon ---
+# --- 7. Sheldon ---
 if ! exists sheldon; then
     echo "Installing sheldon..."
     if exists brew || exists pacman; then
@@ -117,7 +163,7 @@ if ! exists sheldon; then
     fi
 fi
 
-# --- 7. Rust made tools ---
+# --- 8. Rust made tools ---
 if ! exists lsd; then
     # lsd
     echo "Installing lsd..."
@@ -170,7 +216,7 @@ if ! exists delta; then
     fi
 fi
 
-# --- 8. Nerd Fonts ---
+# --- 9. Nerd Fonts ---
 FONT_NAME="JetBrainsMono"
 echo "Checking Nerd Fonts ($FONT_NAME)..."
 
@@ -206,7 +252,7 @@ else
     fi
 fi
 
-# --- 9. Local Settings ---
+# --- 10. Local Settings ---
 echo "==> Configuring Environment..."
 if [ ! -f "$HOME/.zshrc.local" ]; then
     echo "Creating .zshrc.local (for secret envs)..."
@@ -215,7 +261,7 @@ if [ ! -f "$HOME/.zshrc.local" ]; then
     echo "# It is excluded from Git." >> "$HOME/.zshrc.local"
 fi
 
-# --- 10. Link Configs ---
+# --- 11. Link Configs ---
 echo "==> Linking Configs..."
 mkdir -p "$HOME/.config"
 
@@ -235,7 +281,7 @@ if [ -d "$DOTFILES_DIR/.config" ]; then
 fi
 echo "Links created."
 
-# --- 11. Git Configuration ---
+# --- 12. Git Configuration ---
 echo "==> Git Configuration..."
 if [ -z "$(git config --global user.name)" ]; then
     read -p "Enter Git user.name: " git_name
@@ -256,7 +302,7 @@ if exists delta; then
     git config --global diff.colorMoved default
 fi
 
-# --- 12. Default shell change ---
+# --- 13. Default shell change ---
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "Changing default shell to zsh..."
     chsh -s "$(which zsh)"
