@@ -26,5 +26,9 @@ if command -v zoxide > /dev/null; then
     eval "$(zoxide init zsh)"
 fi
 
+# Keybindings
+bindkey '^[[1;5C' forward-word   # Ctrl + ->
+bindkey '^[[1;5D' backward-word  # Ctrl + <-
+
 # Local configurations
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
