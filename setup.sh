@@ -116,11 +116,10 @@ if ! exists zig; then
         
         mkdir -p "$DEST_DIR"
         mkdir -p "$BIN_DIR"
-        
         curl -L -o "/tmp/zig.tar.xz" "$ZIG_URL"
-        rm -rf "$DEST_DIR/zig-linux-x86_64-${ZIG_VER}"
+        rm -rf "$DEST_DIR/zig-$ZIG_ARCH-$ZIG_VER"
         tar -C "$DEST_DIR" -xJf "/tmp/zig.tar.xz"
-        ln -sf "$DEST_DIR/zig-linux-x86_64-${ZIG_VER}/zig" "$BIN_DIR/zig"
+        ln -sf "$DEST_DIR/zig-$ZIG_ARCH-$ZIG_VER/zig" "$BIN_DIR/zig"
         rm "/tmp/zig.tar.xz"
         echo "Zig installed."
     fi
