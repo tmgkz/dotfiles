@@ -125,6 +125,55 @@ if ! exists zig; then
     fi
 fi
 
+if ! exists go; then
+    echo "Installing Go..."
+    if exists brew || exists pacman; then
+        $INSTALL_CMD go
+    else
+        echo "Fetching latest Go version info..."
+        
+        ARCH=$(uname -m)
+        if [ "$ARCH" == "x86_64" ]; then
+            GO_ARCH="amd64"
+        elif [ "$ARCH" == "aarch64" ]; then
+            GO_ARCH="arm64"
+        else
+            echo "Error: Unsupported architecture for Go auto-install: $ARCH"
+            exit 1
+        fi
+        
+        GO_FILE=$(curl -s "https://go.dev/dl/?mode=json" | jq -r --arg a "$GO_ARCH" '.[0].files[] | select(.os == "linux" and .arch == $a) | .filename')
+        GO_VER=$(curl -s "https://go.dev/dl/?mode=json" | jq -r '.[0].version')
+        GO_URL="https://go.dev/dl/${GO_FILE}"
+        
+        if [ -z "$GO_FILE" ] || [ "$GO_FILE" == "null" ]; then
+            echo "Error: Failed to find Go binary for linux-$GO_ARCH"
+            exit 1
+        fi
+
+        echo "Detected latest Go version: $GO_VER"
+        echo "Downloading from: $GO_URL"
+        
+        DEST_DIR="$HOME/.local/go"
+        BIN_DIR="$HOME/.local/bin"
+        
+        mkdir -p "$DEST_DIR"
+        mkdir -p "$BIN_DIR"
+        
+        curl -L -o "/tmp/go.tar.gz" "$GO_URL"
+        
+        rm -rf "$DEST_DIR"
+        
+        tar -C "$HOME/.local" -xzf "/tmp/go.tar.gz"
+        
+        ln -sf "$DEST_DIR/bin/go" "$BIN_DIR/go"
+        ln -sf "$DEST_DIR/bin/gofmt" "$BIN_DIR/gofmt"
+        
+        rm "/tmp/go.tar.gz"
+        echo "Go installed to $DEST_DIR"
+    fi
+fi
+
 # --- 5. Neovim ---
 if ! exists nvim; then
     echo "Installing Neovim..."

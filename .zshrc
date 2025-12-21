@@ -4,6 +4,10 @@ autoload -Uz compinit && compinit
 # Rust (Cargo)
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
+# Go
+export GOPATH="$HOME/go"
+export PATH="$PATH:$HOME/.local/go/bin:$GOPATH/bin"
+
 # starship
 eval "$(starship init zsh)"
 
