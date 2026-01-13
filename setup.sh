@@ -275,6 +275,8 @@ if [ "$(uname)" == "Darwin" ]; then
     else
         echo "Nerd Font is already installed."
     fi
+elif exists pacman; then
+    $INSTALL_CMD ttf-jetbrains-mono-nerd
 else
     FONT_DIR="$HOME/.local/share/fonts"
     if [ ! -d "$FONT_DIR" ]; then
