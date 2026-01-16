@@ -351,6 +351,9 @@ if exists delta; then
     git config --global delta.side-by-side true
     git config --global merge.conflictstyle diff3
     git config --global diff.colorMoved default
+    git config --global core.editor "vim"
+    git config --global sequence.editor "vim"
+    git config --global help.autoCorrect prompt
 fi
 
 # --- 13. Default shell change ---
