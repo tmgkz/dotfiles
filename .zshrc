@@ -31,8 +31,10 @@ if command -v zoxide > /dev/null; then
 fi
 
 # Keybindings
-bindkey '^[[1;5C' forward-word   # Ctrl + ->
-bindkey '^[[1;5D' backward-word  # Ctrl + <-
+bindkey '^[[1;5C' forward-word # Ctrl + ->
+bindkey '^[[1;5D' backward-word # Ctrl + <-
+bindkey '^[[3~' delete-char # Delete key
+
 
 # Local configurations
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
