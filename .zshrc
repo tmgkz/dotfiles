@@ -34,6 +34,8 @@ fi
 bindkey '^[[1;5C' forward-word # Ctrl + ->
 bindkey '^[[1;5D' backward-word # Ctrl + <-
 bindkey '^[[3~' delete-char # Delete key
+bindkey '^?' backward-delete-word # Ctrl + Backspace
+bindkey '^[[3;5~' forward-word-kill # Ctrl + Delete
 
 
 # Local configurations
