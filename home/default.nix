@@ -27,6 +27,7 @@
       git
       wireshark
       spotify
+      podman
 
       go
       zig
