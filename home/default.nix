@@ -28,6 +28,7 @@
       wireshark
       spotify
       podman
+      terraform
 
       go
       zig
